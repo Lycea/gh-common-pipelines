@@ -7,8 +7,6 @@ inputs:
     default: "game"
 
 runs:
-  env:
-    INPUT_GAME_NAME: ${{ inputs.game_name }}
   using: "composite"
   steps:
     - name: 'Setup npm for building ...'
@@ -21,11 +19,16 @@ runs:
       shell: bash
       run: |
         zip -9 -r $INPUT_GAME_NAME.love .
-
+      env:
+        INPUT_GAME_NAME: ${{ inputs.game_name }}
+        
     - name: "build web version..."
       shell: bash
       run: |
-        npx love.js $INPUT_GAME_NAME.love $INPUT_GAME_NAME -c --title $INPUT_GAME_NAME
+        npx love.js $INPUT_GAME_NAME.love $INPUT_GAME_NAME -c --title $INPUT_GAME_      
+      env:
+        INPUT_GAME_NAME: ${{ inputs.game_name }}NAME
+      
 
     - name: 'Setup Pages'
       uses: actions/configure-pages@v5
@@ -35,6 +38,8 @@ runs:
       with:
         # Upload entire repository
         path: './$INPUT_GAME_NAME/'
+      env:
+        INPUT_GAME_NAME: ${{ inputs.game_name }}
         
     - name: Deploy to GitHub Pages
       id: deployment
