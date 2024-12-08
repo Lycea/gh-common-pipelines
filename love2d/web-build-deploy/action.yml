@@ -13,6 +13,7 @@ runs:
       uses: actions/setup-node@v4
 
     - name: "install dependency"
+      shell: bash
       run: npm i love.js
 
     - name: "zip game ..."
