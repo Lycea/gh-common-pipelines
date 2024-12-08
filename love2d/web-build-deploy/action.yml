@@ -26,9 +26,9 @@ runs:
     - name: "build web version..."
       shell: bash
       run: |
-        npx love.js $INPUT_GAME_NAME.love $INPUT_GAME_NAME -c --title $INPUT_GAME_      
+        npx love.js $INPUT_GAME_NAME.love $INPUT_GAME_NAME -c --title $INPUT_GAME_NAME      
       env:
-        INPUT_GAME_NAME: ${{ inputs.game_name }}NAME
+        INPUT_GAME_NAME: ${{ inputs.game_name }}
       
 
     - name: 'Setup Pages'
