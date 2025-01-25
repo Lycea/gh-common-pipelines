@@ -1,0 +1,47 @@
+name: "love2d-web-build-deploy"
+description: "Builds and deploys the game which exists the repository which this action is used in"
+inputs:
+  game_name:
+    description: "Name of the game ... will be used for the naming and some temporary folder namings"
+    required: false
+    default: "game"
+
+runs:
+  using: "composite"
+  steps:
+    - name: 'Setup npm for building ...'
+      uses: actions/setup-node@v4
+
+    - name: "install dependency"
+      shell: bash
+      run: npm i love.js
+
+    - name: "zip game ..."
+      shell: bash
+      run: |
+        zip -9 -r $INPUT_GAME_NAME.love .
+      env:
+        INPUT_GAME_NAME: ${{ inputs.game_name }}
+        
+    - name: "build web version..."
+      shell: bash
+      run: |
+        npx love.js $INPUT_GAME_NAME.love $INPUT_GAME_NAME -c --title $INPUT_GAME_NAME      
+      env:
+        INPUT_GAME_NAME: ${{ inputs.game_name }}
+      
+
+    - name: 'Setup Pages'
+      uses: actions/configure-pages@v5
+      
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        # Upload entire repository
+        path: './$INPUT_GAME_NAME/'
+      env:
+        INPUT_GAME_NAME: ${{ inputs.game_name }}
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
